@@ -4,12 +4,10 @@ class Solution:
         maxCnt = 0
         for i in nums:
             num = i
-            cnt = 0
-            while num-1 in hs:
-                num -= 1
-            while num in hs:
-                maxCnt = max(maxCnt,cnt + 1)
-                hs.remove(num)
-                num = num + 1     
-                cnt += 1
+            if num-1 not in hs:
+                cnt = 1
+                while num+1 in hs:
+                    cnt += 1
+                    num += 1
+                maxCnt = max(maxCnt,cnt)
         return maxCnt
