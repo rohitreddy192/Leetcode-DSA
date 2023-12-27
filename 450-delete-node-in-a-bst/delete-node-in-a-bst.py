@@ -6,56 +6,40 @@
 #         self.right = right
 class Solution:
     def deleteNode(self, root: Optional[TreeNode], k: int) -> Optional[TreeNode]:
-        if root is None:
-            return root
-    
-        # Recursive calls for ancestors of
-        # node to be deleted
-        if root.val > k:
-            root.left = self.deleteNode(root.left, k)
-            return root
-        elif root.val < k:
-            root.right = self.deleteNode(root.right, k)
-            return root
-    
-        # We reach here when root is the node
-        # to be deleted.
-    
-        # If one of the children is empty
-        if root.left is None:
-            temp = root.right
-            del root
-            return temp
-        elif root.right is None:
-            temp = root.left
-            del root
-            return temp
-    
-        # If both children exist
-        else:
-    
-            succParent = root
-    
-            # Find successor
-            succ = root.right
-            while succ.left is not None:
-                succParent = succ
-                succ = succ.left
-    
-            # Delete successor.  Since successor
-            # is always left child of its parent
-            # we can safely make successor's right
-            # right child as left of its parent.
-            # If there is no succ, then assign
-            # succ.right to succParent.right
-            if succParent != root:
-                succParent.left = succ.right
+        def goTillEnd(root):
+            if not root.right: return root
+            return goTillEnd(root.right)
+        def helper(root):
+            if not root.left:
+                return root.right
+            elif not root.right:
+                return root.left
             else:
-                succParent.right = succ.right
-    
-            # Copy Successor Data to root
-            root.val = succ.val
-    
-            # Delete Successor and return root
-            del succ
-            return root
+                rightChild = root.right
+                lastRight = goTillEnd(root.left)
+                lastRight.right = rightChild
+                return root.left
+        if not root: return root
+        if root.val == k: return helper(root)
+        dummy = root
+        while root:
+            if root.val>k:
+                if root.left and root.left.val == k:
+                    root.left = helper(root.left)
+                    break
+                else:
+                    root = root.left
+            else:
+                if root.right and root.right.val == k:
+                    root.right = helper(root.right)
+                    break
+                else:
+                    root = root.right
+        return dummy             
+        
+        """
+        Three Steps:-
+            1. Find the key k.
+            2. Send the node to delete and replace.
+            3. Attach the rest of the part at the end.
+        """
