@@ -1,14 +1,15 @@
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
-        def solve(i,j,dp):
-            if i==0 and j==0: return 1
-            if i<0 or j<0: return 0
-            if dp[i][j] !=-1: return dp[i][j]
+        def solve(m,n,dp):
+            if m==1 or n == 1: return 1
 
-            up = solve(i,j-1,dp)
-            left = solve(i-1,j,dp)
-            
-            dp[i][j] = up+left
-            return up + left
-        dp = [[-1 for i in range(n)]for j in range(m)]
-        return solve(m-1,n-1,dp)
+            if dp[m][n] != -1: return dp[m][n]
+            up = solve(m-1,n,dp) 
+            left = solve(m,n-1,dp)
+
+            dp[m][n] = left+up
+            return dp[m][n]
+
+        dp = [[-1 for i in range(n+1)] for j in range(m+1)]  
+        return solve(m,n,dp)
+        
