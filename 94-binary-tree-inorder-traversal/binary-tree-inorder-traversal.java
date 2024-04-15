@@ -15,10 +15,26 @@
  */
 class Solution {
     private void inorder(TreeNode root, ArrayList<Integer> arr){
-        if(root == null) return;
-        this.inorder(root.left,arr);
-        arr.add(root.val);
-        this.inorder(root.right,arr);
+        Stack<TreeNode> st = new Stack<>();
+        if(root==null) return;
+        TreeNode node = root;
+        while(true){
+            if(node != null){
+                st.push(node);
+                node = node.left;
+            }else{
+                if(st.isEmpty()){
+                    break;
+                }
+                node = st.pop();
+                arr.add(node.val);             
+                node = node.right;
+            }
+        }
+        // if(root == null) return;
+        // this.inorder(root.left,arr);
+        // arr.add(root.val);
+        // this.inorder(root.right,arr);
     }
     public List<Integer> inorderTraversal(TreeNode root) {
         ArrayList<Integer> arr = new ArrayList<>();
