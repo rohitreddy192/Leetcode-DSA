@@ -4,7 +4,7 @@ class Solution:
         op = 0
         f = False  
         for i in range(n):
-            if nums[i] == f:
+            if (nums[i] == 1 and f) or (nums[i]==0 and not f):
                 op += 1
                 f = not f  
         return op
