@@ -2,11 +2,6 @@ class Solution {
     public int[][] highFive(int[][] items) {
         Map<Integer, List<Integer>> mpp = new HashMap<>();
         for(int[] res : items){
-            // if(mpp.containsKey(res[0])){
-            //     mpp.get(res[0]).append(res[1])
-            // }else{
-            //     mpp.put(res[0], new ArrayList<Integer>())
-            // }
             mpp.computeIfAbsent(res[0], k -> new ArrayList<>()).add(res[1]);
         }
         List<int[]> result = new ArrayList<>();
