@@ -5,11 +5,7 @@ class Solution {
         int l=0, r = n-1;
         while(l<r){
             maxi = Math.max(maxi, Math.min(height[l],height[r])*(r-l));
-            if(height[l]<height[r]){
-                l++;
-            }else{
-                r--;
-            }
+            int tmp = (height[l]<height[r]) ? l++: r--;
         }
         return maxi;
     }
