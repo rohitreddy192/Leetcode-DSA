@@ -1,16 +1,4 @@
 class Solution {
-    private static String[] getPhnChars(){
-        String[] phnChars = new String[10];
-        phnChars[2]= "abc";
-        phnChars[3] = "def";
-        phnChars[4] = "ghi";
-        phnChars[5] = "jkl";
-        phnChars[6] = "mno";
-        phnChars[7] = "pqrs";
-        phnChars[8] = "tuv";
-        phnChars[9] = "wxyz";
-        return phnChars;
-    }
     private void solve(String digits, int i, String currStr, List<String> res, Map<Character, String> d) {
         if (currStr.length() == digits.length()) {
             res.add(currStr);
