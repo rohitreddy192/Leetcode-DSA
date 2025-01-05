@@ -1,30 +1,34 @@
 class Solution {
     public String convert(String s, int numRows) {
-        if(numRows==1) return s;
-        Map<Integer,List<Character>> mpp = new HashMap<>();
-        int n = s.length();
-        int rowTracker = 1;
-        for(int i=0;i<numRows;i++){
-            mpp.put(i,new ArrayList<>());
-        }
-        mpp.get(0).add(s.charAt(0));
-        System.out.println(mpp);
-        boolean flag = true;
-        for(int i=1;i<n;i++){
-            mpp.get(rowTracker).add(s.charAt(i));
-            if(rowTracker==0 || rowTracker==numRows-1){flag = !flag;}
-            if(flag) rowTracker++;
-            if(!flag) rowTracker--;
+        if (numRows == 1) {
+            return s;
         }
 
-        
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < numRows; i++) {
-            for (char c : mpp.get(i)) {
-                result.append(c);
+        StringBuilder answer = new StringBuilder();
+        int n = s.length();
+        int charsInSection = 2 * (numRows - 1);
+
+        for (int currRow = 0; currRow < numRows; ++currRow) {
+            int index = currRow;
+
+            while (index < n) {
+                answer.append(s.charAt(index));
+
+                // If currRow is not the first or last row
+                // then we have to add one more character of current section.
+                if (currRow != 0 && currRow != numRows - 1) {
+                    int charsInBetween = charsInSection - 2 * currRow;
+                    int secondIndex = index + charsInBetween;
+
+                    if (secondIndex < n) {
+                        answer.append(s.charAt(secondIndex));
+                    }
+                }
+                // Jump to same row's first character of next section.
+                index += charsInSection;
             }
         }
 
-        return result.toString();
+        return answer.toString();
     }
 }
