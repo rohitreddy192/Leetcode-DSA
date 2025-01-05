@@ -1,34 +1,35 @@
 class Solution {
     public String convert(String s, int numRows) {
-        if (numRows == 1) {
-            return s;
+        if (numRows == 1 || s.length() <= numRows) return s;
+
+        // Use an array of StringBuilder for each row
+        StringBuilder[] rows = new StringBuilder[numRows];
+        for (int i = 0; i < numRows; i++) {
+            rows[i] = new StringBuilder();
         }
 
-        StringBuilder answer = new StringBuilder();
-        int n = s.length();
-        int charsInSection = 2 * (numRows - 1);
+        int rowTracker = 0; // To track the current row
+        boolean goingDown = false; // Direction flag
 
-        for (int currRow = 0; currRow < numRows; ++currRow) {
-            int index = currRow;
+        // Traverse the input string
+        for (char c : s.toCharArray()) {
+            rows[rowTracker].append(c); // Add the character to the current row
 
-            while (index < n) {
-                answer.append(s.charAt(index));
-
-                // If currRow is not the first or last row
-                // then we have to add one more character of current section.
-                if (currRow != 0 && currRow != numRows - 1) {
-                    int charsInBetween = charsInSection - 2 * currRow;
-                    int secondIndex = index + charsInBetween;
-
-                    if (secondIndex < n) {
-                        answer.append(s.charAt(secondIndex));
-                    }
-                }
-                // Jump to same row's first character of next section.
-                index += charsInSection;
+            // Change direction at the top or bottom row
+            if (rowTracker == 0 || rowTracker == numRows - 1) {
+                goingDown = !goingDown;
             }
+
+            // Update the row index based on the direction
+            rowTracker += goingDown ? 1 : -1;
         }
 
-        return answer.toString();
+        // Combine all rows into a single result
+        StringBuilder result = new StringBuilder();
+        for (StringBuilder row : rows) {
+            result.append(row);
+        }
+
+        return result.toString();
     }
 }
