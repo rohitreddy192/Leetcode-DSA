@@ -7,6 +7,10 @@ class Solution:
             if nums[mid] == target:
                 return mid
 
+            if nums[start] == nums[end] and start != end:
+                start += 1
+                end -= 1
+
             if nums[start]<=nums[mid]:
                 if nums[start]<=target<nums[mid]:
                     end = mid
