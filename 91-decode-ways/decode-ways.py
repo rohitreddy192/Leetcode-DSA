@@ -1,14 +1,14 @@
 class Solution:
     def numDecodings(self,s):
+        if s.startswith("0"): return 0
         n = len(s)
         @lru_cache(None)
         def solve(i):
             if i==n: return 1
-            if s[i]=="0": return 0
-
+            if i>n or s[i]=="0": return 0
             pick_1 = solve(i+1)
             pick_2 = 0
-            if i+1 < n and int(s[i:i+2])<=26:
+            if 10<=int(s[i:i+2])<=26 and i+1 < n:
                 pick_2 = solve(i+2)
 
             return pick_1 + pick_2
