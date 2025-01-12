@@ -58,31 +58,3 @@ class MyHashMap:
                 prev.next = curr.next
                 return
             prev, curr = curr, curr.next
-
-        
-        # bucketNode = self.buckets[self.getBucketIndex(key)]
-        # head = bucketNode
-        # if not bucketNode:
-        #     return
-        # nextNode = bucketNode.next
-        # if bucketNode.key == key:
-        #     head = nextNode
-        #     return
-        # while nextNode:
-        #     if nextNode.key == key:
-        #         head.next = nextNode.next
-        #         return
-        #     else:
-        #         nextNode = nextNode.next
-        #         head = head.next
-
-
-    
-        
-
-
-# Your MyHashMap object will be instantiated and called as such:
-# obj = MyHashMap()
-# obj.put(key,value)
-# param_2 = obj.get(key)
-# obj.remove(key)
