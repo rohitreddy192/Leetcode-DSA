@@ -8,8 +8,8 @@ class Map:
 class MyHashMap:
 
     def __init__(self):
-        self.capacity = 100
-        self.buckets = [None for _ in range(100)]
+        self.capacity = 2069
+        self.buckets = [None for _ in range(2069)]
 
     def getBucketIndex(self,key):
         return hash(key) % self.capacity
