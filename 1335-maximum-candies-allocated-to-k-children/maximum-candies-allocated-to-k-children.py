@@ -13,7 +13,7 @@ class Solution:
             return cnt >= k
 
         low = 0
-        high = sum(candies)
+        high = sum(candies)//k
         ans = 0
         while low<=high:
             mid = (low+high)//2
