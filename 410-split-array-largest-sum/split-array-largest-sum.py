@@ -7,7 +7,7 @@ class Solution:
                 if currentCnt + num > mid:
                     currentCnt = num
                     cnt += 1
-                    if cnt > k or num > mid:
+                    if cnt > k :
                         return False
                 else:
                     currentCnt += num
