@@ -4,15 +4,20 @@ class Solution:
         left, right = 0, 0
         n = len(s)
         maxi = 0
-        while right<n and left<=right:
-            if s[right] in seen or len(seen)<k:
-                seen[s[right]] += 1
-                right += 1
-            else:
-                while s[right] not in seen and len(seen)>=k:
-                    seen[s[left]] -= 1
-                    if seen[s[left]] == 0:
-                        del seen[s[left]]
-                    left += 1
-            maxi = max(right-left,maxi)
+        while right<n:
+            seen[s[right]] += 1
+            
+            # If there are more than `k` distinct characters, shrink the window
+            while len(seen) > k:
+                seen[s[left]] -= 1
+                if seen[s[left]] == 0:
+                    del seen[s[left]]
+                left += 1
+            
+            # Update the maximum length of the substring
+            maxi = max(maxi, right - left + 1)
+            
+            # Move `right` pointer to the next character
+            right += 1
+        
         return maxi
