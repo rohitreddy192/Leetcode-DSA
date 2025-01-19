@@ -1,25 +1,32 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        dq = deque()
         n, m = len(grid), len(grid[0])
+        q = deque()
+        fresh = 0
+        
+        # Initialize visited and fresh orange count
         for i in range(n):
             for j in range(m):
                 if grid[i][j] == 2:
-                    dq.append([i,j])
-        time = 0
-        while dq:
-            for i in range(len(dq)):
-                x, y = dq.popleft()
-                drow = [-1,0,1,0]
-                dcol = [0,-1,0,1]
-                for i in range(4):
-                    dx, dy = drow[i]+x, dcol[i]+y
-                    if dx>=0 and dx<n and dy>=0 and dy<m and grid[dx][dy]==1:
-                        dq.append([dx,dy])
-                        grid[dx][dy] = 2
-            time += 1
-        for i in range(n):
-            for j in range(m):
-                if grid[i][j] == 1:
-                    return -1
-        return time-1 if time!=0 else 0
+                    q.append((i, j))  # Initially rotten oranges
+                elif grid[i][j] == 1:
+                    fresh += 1  # Count fresh oranges
+        
+        if fresh == 0: return 0  # No fresh oranges to rot
+        
+        cnt = 0
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        
+        # BFS process
+        while q:
+            for _ in range(len(q)):
+                x, y = q.popleft()
+                for dx, dy in directions:
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < n and 0 <= ny < m and grid[nx][ny] == 1:
+                        grid[nx][ny] = 2  # Rot the fresh orange
+                        q.append((nx, ny))
+                        fresh -= 1  # Decrease the count of fresh oranges
+            cnt += 1
+        
+        return cnt-1 if fresh == 0 else -1 
