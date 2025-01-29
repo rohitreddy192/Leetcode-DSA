@@ -1,8 +1,40 @@
 class Solution:
     def climbStairs(self, n: int) -> int:
-        a0, a1 = 1, 1
-        for i in range(1,n+1):
-            temp = a0
-            a0 = a1
-            a1 = a1 + temp
-        return a0
+        @lru_cache(None)
+        def solve(n):
+            if n==1: return 1
+            if n==2: return 2
+
+            return solve(n-1)+solve(n-2)
+        
+        return solve(n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # @lru_cache(maxsize=None)
+        # def solve(ind):
+        #     if ind==0: return 1
+        #     if ind<0: return 0
+        #     two_step = 0
+        #     one_step = solve(ind-1)
+        #     if ind>1:
+        #         two_step = solve(ind-2)
+        #     return one_step + two_step
+        # return solve(n)
