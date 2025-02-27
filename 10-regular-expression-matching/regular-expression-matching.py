@@ -1,14 +1,19 @@
 class Solution(object):
     def isMatch(self, text: str, pattern: str) -> bool:
-        dp = [[False] * (len(pattern) + 1) for _ in range(len(text) + 1)]
+        dp = {}
+        n, m = len(text), len(pattern)
+        def solve(i,j):
+            if i>=n and j>=m: return True
+            if j>=m: return False
+            if (i,j) in dp: return dp[(i,j)]
 
-        dp[-1][-1] = True
-        for i in range(len(text), -1, -1):
-            for j in range(len(pattern) - 1, -1, -1):
-                first_match = i < len(text) and pattern[j] in {text[i], "."}
-                if j + 1 < len(pattern) and pattern[j + 1] == "*":
-                    dp[i][j] = dp[i][j + 2] or first_match and dp[i + 1][j]
-                else:
-                    dp[i][j] = first_match and dp[i + 1][j + 1]
-
-        return dp[0][0]
+            match = i<n and (text[i]==pattern[j] or pattern[j]==".")
+            if j+1<m and pattern[j+1]=="*":
+                dp[(i,j)] = (match and solve(i+1,j)) or solve(i,j+2)
+                return dp[(i,j)]
+            if match:
+                dp[(i,j)] = solve(i+1,j+1)
+                return dp[(i,j)]
+            dp[(i,j)] = False
+            return dp[(i,j)]
+        return solve(0,0)
