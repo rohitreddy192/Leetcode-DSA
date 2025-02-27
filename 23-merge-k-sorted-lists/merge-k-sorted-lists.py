@@ -7,14 +7,14 @@ class Solution:
     def mergeKLists(
         self, lists: List[Optional[ListNode]]
     ) -> Optional[ListNode]:
-        amount = len(lists)
+        n = len(lists)
         interval = 1
-        while interval < amount:
-            for i in range(0, amount - interval, interval * 2):
+        while interval < n:
+            for i in range(0, n - interval, interval * 2):
                 lists[i] = self.merge2Lists(lists[i], lists[i + interval])
             interval *= 2
 
-        return lists[0] if amount > 0 else None
+        return lists[0] if n > 0 else None
 
     def merge2Lists(self, l1, l2):
         head = point = ListNode(0)
