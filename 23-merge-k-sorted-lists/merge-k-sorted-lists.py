@@ -1,23 +1,36 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        return self.partition(lists, 0, len(lists) - 1)
+    def mergeKLists(
+        self, lists: List[Optional[ListNode]]
+    ) -> Optional[ListNode]:
+        amount = len(lists)
+        interval = 1
+        while interval < amount:
+            for i in range(0, amount - interval, interval * 2):
+                lists[i] = self.merge2Lists(lists[i], lists[i + interval])
+            interval *= 2
 
-    def partition(self, lists: List[Optional[ListNode]], s: int, e: int) -> Optional[ListNode]:
-        if s == e:
-            return lists[s]
-        if s < e:
-            mid = (s + e) // 2
-            l1 = self.partition(lists, s, mid)
-            l2 = self.partition(lists, mid + 1, e)
-            return self.merge(l1, l2)
-        return None
+        return lists[0] if amount > 0 else None
 
-    def merge(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        if not l1: return l2
-        if not l2: return l1
-        if l1.val < l2.val:
-            l1.next = self.merge(l1.next, l2)
-            return l1
+    def merge2Lists(self, l1, l2):
+        head = point = ListNode(0)
+        while l1 and l2:
+            if l1.val <= l2.val:
+                point.next = l1
+                l1 = l1.next
+            else:
+                point.next = l2
+                l2 = l1
+                l1 = point.next.next
+            point = point.next
+
+        if not l1:
+            point.next = l2
         else:
-            l2.next = self.merge(l1, l2.next)
-            return l2
+            point.next = l1
+
+        return head.next
