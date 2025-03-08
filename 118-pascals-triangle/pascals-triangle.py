@@ -1,13 +1,12 @@
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        res = []
+        res = list()
         for i in range(numRows):
-            temp = []
+            row = list()
             for j in range(i+1):
                 if j==0 or j==i:
-                    temp.append(1)
+                    row.append(1)
                 else:
-                    temp.append(res[-1][j-1]+ res[-1][j])
-            res.append(tuple(temp))
+                    row.append(res[i-1][j-1]+res[i-1][j])
+            res.append(row[:])
         return res
-        
