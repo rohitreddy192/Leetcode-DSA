@@ -37,7 +37,7 @@ class Solution:
             plee = [i for i in range(n)]
             st = []
             for i in range(0,n):
-                while st and arr[st[-1]]<arr[i]:
+                while st and arr[st[-1]]<=arr[i]:
                     st.pop()
                 plee[i] = -1 if not st else st[-1]
                 st.append(i)
@@ -46,7 +46,7 @@ class Solution:
             nlee = [i for i in range(n)]
             st = []
             for i in range(n-1,-1,-1):
-                while st and arr[st[-1]]<=arr[i]:
+                while st and arr[st[-1]]<arr[i]:
                     st.pop()
                 nlee[i] = n if not st else st[-1]
                 st.append(i)
