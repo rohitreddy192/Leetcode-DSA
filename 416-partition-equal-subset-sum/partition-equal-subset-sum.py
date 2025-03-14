@@ -3,7 +3,7 @@ class Solution:
         tot = sum(arr)
         if tot%2==1: return False
 
-        @cache
+        @lru_cache(None)
         def solve(i,t):
             if t==0: return True
             if i==0: return arr[0]==t
