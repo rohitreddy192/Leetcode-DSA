@@ -13,8 +13,4 @@ class Solution:
                     count[i] += count[j]
             if maxi<dp[i]:
                 maxi = dp[i]
-        cnt = 0
-        for i in range(n):
-            if dp[i] == maxi:
-                cnt += count[i]
-        return cnt
+        return sum(count[i] for i in range(n) if dp[i]==maxi)
