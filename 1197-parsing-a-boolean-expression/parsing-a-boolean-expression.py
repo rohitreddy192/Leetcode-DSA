@@ -1,30 +1,44 @@
 class Solution:
     def parseBoolExpr(self, expression: str) -> bool:
-        # Repeatedly simplify the expression by evaluating subexpressions
-        while len(expression) > 1:
-            start = max(
-                expression.rfind("!"),
-                expression.rfind("&"),
-                expression.rfind("|"),
-            )
-            end = expression.find(")", start)
-            sub_expr = expression[start : end + 1]
-            result = self._evaluate_sub_expr(sub_expr)
-            expression = expression[:start] + result + expression[end + 1 :]
+        st = deque()
 
-        return expression == "t"
+        # Traverse the entire expression
+        for curr_char in expression:
+            if curr_char == ")":
+                values = []
 
-    def _evaluate_sub_expr(self, sub_expr: str) -> str:
-        # Extract the operator and the enclosed values
-        op = sub_expr[0]
-        values = sub_expr[2:-1]
+                # Gather all values inside the parentheses
+                while st[-1] != "(":
+                    values.append(st.pop())
+                st.pop()  # Remove '('
+                op = st.pop()  # Remove the operator
 
-        # Apply logical operations based on the operator
+                # Evaluate the subexpression and push the result back
+                result = self._evaluate_sub_expr(op, values)
+                st.append(result)
+            elif curr_char != ",":
+                st.append(curr_char)  # Push non-comma characters into the stack
+
+        # Final result is on the top of the stack
+        return st[-1] == "t"
+
+    # Evaluates a subexpression based on the operator and list of values
+    def _evaluate_sub_expr(self, op, values):
         if op == "!":
-            return "f" if values == "t" else "t"
+            return "f" if values[0] == "t" else "t"
+
+        # AND: return 'f' if any value is 'f', otherwise return 't'
         if op == "&":
-            return "f" if "f" in values else "t"
+            for value in values:
+                if value == "f":
+                    return "f"
+            return "t"
+
+        # OR: return 't' if any value is 't', otherwise return 'f'
         if op == "|":
-            return "t" if "t" in values else "f"
+            for value in values:
+                if value == "t":
+                    return "t"
+            return "f"
 
         return "f"  # This point should never be reached
