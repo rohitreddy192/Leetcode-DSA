@@ -2,31 +2,28 @@ class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
         n, m = len(grid), len(grid[0])
         q = deque()
-        fresh = 0
-        
-        # Initialize visited and fresh orange count
+        freshCnt = 0
         for i in range(n):
             for j in range(m):
-                if grid[i][j] == 2:
-                    q.append((i, j))  # Initially rotten oranges
-                elif grid[i][j] == 1:
-                    fresh += 1  # Count fresh oranges
-        
-        if fresh == 0: return 0  # No fresh oranges to rot
-        
-        cnt = 0
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        
-        # BFS process
+                if grid[i][j]==2:
+                    q.append((0,(i,j)))
+                if grid[i][j]==1:
+                    freshCnt += 1
+        maxi = 0
+        dx = [-1,0,1,0]
+        dy = [0,-1,0,1]
         while q:
-            for _ in range(len(q)):
-                x, y = q.popleft()
-                for dx, dy in directions:
-                    nx, ny = x + dx, y + dy
-                    if 0 <= nx < n and 0 <= ny < m and grid[nx][ny] == 1:
-                        grid[nx][ny] = 2  # Rot the fresh orange
-                        q.append((nx, ny))
-                        fresh -= 1  # Decrease the count of fresh oranges
-            cnt += 1
+            time, node = q.popleft()
+            x, y = node
+            maxi = max(time,maxi)
+            for i in range(4):
+                nrow, ncol = x+dx[i], y+dy[i]
+                if 0<=nrow<n and 0<=ncol<m and grid[nrow][ncol]==1:
+                    grid[nrow][ncol]=2
+                    freshCnt -= 1
+                    q.append((time+1,(nrow,ncol)))
         
-        return cnt-1 if fresh == 0 else -1 
+        print(grid)
+
+        return maxi if freshCnt==0 else -1
+            
