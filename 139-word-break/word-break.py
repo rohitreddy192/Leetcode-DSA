@@ -1,33 +1,13 @@
-class TrieNode:
-    def __init__(self):
-        self.is_word = False
-        self.children = {}
-
-
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        root = TrieNode()
-        for word in wordDict:
-            curr = root
-            for c in word:
-                if c not in curr.children:
-                    curr.children[c] = TrieNode()
-                curr = curr.children[c]
+        wordSet = set(wordDict)  # Convert list to set for O(1) lookups
+        dp = [False] * (len(s) + 1)
+        dp[0] = True  # Base case: Empty string is always breakable
 
-            curr.is_word = True
-
-        dp = [False] * len(s)
-        for i in range(len(s)):
-            if i == 0 or dp[i - 1]:
-                curr = root
-                for j in range(i, len(s)):
-                    c = s[j]
-                    if c not in curr.children:
-                        # No words exist
-                        break
-
-                    curr = curr.children[c]
-                    if curr.is_word:
-                        dp[j] = True
+        for i in range(1, len(s) + 1):
+            for j in range(i):
+                if dp[j] and s[j:i] in wordSet:  # If prefix is valid and suffix exists in wordSet
+                    dp[i] = True
+                    break  # No need to check further
 
         return dp[-1]
