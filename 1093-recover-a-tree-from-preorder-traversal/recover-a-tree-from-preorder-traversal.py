@@ -1,31 +1,32 @@
 class Solution:
     def recoverFromPreorder(self, traversal: str) -> Optional[TreeNode]:
-        stack = []
-        i, n = 0, len(traversal)
+        def dfs(depth, index):
+            if index >= len(traversal):
+                return None, index
 
-        while i < n:
-            depth = 0
-            while i < n and traversal[i] == "-":
-                depth += 1
-                i += 1  # Move past dashes to find the number
+            # Count dashes to determine depth
+            dashes = 0
+            while index < len(traversal) and traversal[index] == "-":
+                dashes += 1
+                index += 1
+            
+            # If depth doesn't match, return back
+            if dashes != depth:
+                return None, index - dashes
 
+            # Extract the number (node value)
             value = 0
-            while i < n and traversal[i].isdigit():
-                value = value * 10 + int(traversal[i])
-                i += 1  # Move past digits to find next node
-
+            while index < len(traversal) and traversal[index].isdigit():
+                value = value * 10 + int(traversal[index])
+                index += 1
+            
             node = TreeNode(value)
 
-            # If depth is equal to stack size, it means this is a left child
-            while len(stack) > depth:
-                stack.pop()
+            # Recursively process left and right children
+            node.left, index = dfs(depth + 1, index)
+            node.right, index = dfs(depth + 1, index)
 
-            if stack:
-                if stack[-1].left is None:
-                    stack[-1].left = node
-                else:
-                    stack[-1].right = node
+            return node, index
 
-            stack.append(node)
-
-        return stack[0]  # Root is at the bottom of the stack
+        root, _ = dfs(0, 0)
+        return root
