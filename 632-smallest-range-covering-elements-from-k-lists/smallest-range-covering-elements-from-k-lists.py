@@ -1,36 +1,35 @@
-from heapq import heappush, heappop
-from typing import List
-
 class Solution:
     def smallestRange(self, nums: List[List[int]]) -> List[int]:
-        k = len(nums)  # Number of lists
-        left, right = nums[0][0], nums[0][0]  # Initial range
-        min_heap = []  # Min-heap to track the smallest element
+        merged = []
 
-        # Initialize the heap with the first element of each list
-        for i in range(k):
-            l = nums[i]
-            left = min(left, l[0])
-            right = max(right, l[0])
-            heappush(min_heap, (l[0], i, 0))  # (value, list index, index in list)
+        # Merge all lists with their list index
+        for i in range(len(nums)):
+            for num in nums[i]:
+                merged.append((num, i))
 
-        res = [left, right]
+        # Sort the merged list
+        merged.sort()
 
-        while True:
-            # Extract the smallest element from the heap
-            n, i, idx = heappop(min_heap)
-            idx += 1  # Move to the next element in the same list
+        # Two pointers to track the smallest range
+        freq = defaultdict(int)
+        left, count = 0, 0
+        range_start, range_end = 0, float("inf")
 
-            # If the list is exhausted, return the current best range
-            if idx == len(nums[i]):
-                return res
+        for right in range(len(merged)):
+            freq[merged[right][1]] += 1
+            if freq[merged[right][1]] == 1:
+                count += 1
 
-            next_val = nums[i][idx]  # Next element in the same list
-            heappush(min_heap, (next_val, i, idx))  # Push next element into the heap
+            # When all lists are represented, try to shrink the window
+            while count == len(nums):
+                cur_range = merged[right][0] - merged[left][0]
+                if cur_range < range_end - range_start:
+                    range_start = merged[left][0]
+                    range_end = merged[right][0]
 
-            right = max(right, next_val)  # Update the right boundary
-            left = min_heap[0][0]  # The smallest value in the heap is the new left boundary
+                freq[merged[left][1]] -= 1
+                if freq[merged[left][1]] == 0:
+                    count -= 1
+                left += 1
 
-            # Update the result if the new range is smaller
-            if right - left < res[1] - res[0]:
-                res = [left, right]
+        return [range_start, range_end]
