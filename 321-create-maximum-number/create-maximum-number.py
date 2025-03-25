@@ -9,6 +9,7 @@ class Solution:
                     stack.pop()
                     drop -= 1
                 stack.append(num)
+            print(stack)
             return stack[:size]  # Return only the required size
 
         # Function to merge two subsequences into the largest lexicographical order
@@ -28,8 +29,14 @@ class Solution:
         
         # Try all possible ways to split k elements between nums1 and nums2
         for x in range(max(0, k - len(nums2)), min(k, len(nums1)) + 1):
+            print("Turn")
             sub1 = getMaxSubarray(nums1, x)  # Best x elements from nums1
             sub2 = getMaxSubarray(nums2, k - x)  # Best (k-x) elements from nums2
-            max_result = max(max_result, merge(sub1, sub2))  # Pick the lexicographically largest
+            print(sub1)
+            print(sub2)
+            ans = merge(sub1, sub2)
+            print(ans)
+            print("end")
+            max_result = max(max_result, ans)  # Pick the lexicographically largest
         
         return max_result
