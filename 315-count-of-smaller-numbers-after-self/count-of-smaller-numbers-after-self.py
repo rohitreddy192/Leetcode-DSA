@@ -1,10 +1,13 @@
 class Solution:
     def countSmaller(self, nums: List[int]) -> List[int]:
-        s = SortedList()
+        s = []
         op = []
         for n in nums[::-1]:
-            ans = SortedList.bisect_left(s,n)
+            ans = bisect_left(s,n)
             op.append(ans)
-            s.add(n)
+            if ans == len(s):
+                s.append(n)
+            else:
+                s.insert(ans,n)
         
         return op[::-1]
