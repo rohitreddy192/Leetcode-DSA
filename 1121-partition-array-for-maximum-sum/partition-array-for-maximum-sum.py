@@ -1,9 +1,11 @@
 class Solution:
     def maxSumAfterPartitioning(self, arr: List[int], k: int) -> int:
         n = len(arr)
-        @lru_cache(None)
+        dp = {}
         def solve(i):
             if i==n: return 0
+
+            if i in dp: return dp[i]
 
             len = 0
             maxi = 0
@@ -14,6 +16,7 @@ class Solution:
                 sum = maxi*len + solve(j+1)
                 maxAns = max(sum, maxAns)
             
-            return maxAns
+            dp[i] = maxAns
+            return dp[i]
         
         return solve(0)
