@@ -9,7 +9,7 @@ class Solution:
                 return float('-inf')
             
             # If both persons reach the bottom-right cell
-            if r1 == N - 1 and c1 == N - 1 and r2 == N-1 and c2==N-1:
+            if r1 == N - 1 and c1 == N - 1:
                 return grid[r1][c1]
             
             # Collect cherries, ensuring no double counting
