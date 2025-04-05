@@ -1,7 +1,7 @@
 class Solution:
     def minCost(self, n: int, cuts: List[int]) -> int:
         cuts.append(n)
-        cuts.insert(0,0)
+        cuts.append(0)
         cuts.sort()
         @lru_cache(None)
         def solve(i,j):
