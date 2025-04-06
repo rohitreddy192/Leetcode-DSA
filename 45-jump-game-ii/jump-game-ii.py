@@ -1,13 +1,16 @@
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        l = r = 0
-        res = 0
+        
+        n = len(nums)
+        @lru_cache(None)
+        def solve(i):
+            if i>=n-1:
+                return 0
+            
+            pick = 1e9
+            for j in range(1,nums[i]+1):
+                pick = min(pick, 1 + solve(i+j))
 
-        while r < len(nums) - 1:
-            farthest = 0
-            for i in range(l, r + 1):
-                farthest = max(farthest, i + nums[i])
-            l = r + 1
-            r = farthest
-            res += 1
-        return res
+            return pick
+        
+        return solve(0)
