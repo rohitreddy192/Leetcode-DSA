@@ -1,16 +1,15 @@
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        
+        l, r  = 0, 0
         n = len(nums)
-        @lru_cache(None)
-        def solve(i):
-            if i>=n-1:
-                return 0
+        res = 0
+        while r<n-1:
+            far = 0
+            for j in range(l,r+1):
+                far = max(far, j + nums[j])
             
-            pick = 1e9
-            for j in range(1,nums[i]+1):
-                pick = min(pick, 1 + solve(i+j))
-
-            return pick
+            l = r + 1
+            r = far
+            res += 1
         
-        return solve(0)
+        return res
