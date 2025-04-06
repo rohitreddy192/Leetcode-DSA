@@ -2,7 +2,7 @@ class Solution:
     def maxVacationDays(self, flights: List[List[int]], days: List[List[int]]) -> int:        
         N = len(flights)      # number of cities
         K = len(days[0])      # number of weeks
-        
+
         @lru_cache(maxsize=None)
         def solve(city, week):
             if week == K:
