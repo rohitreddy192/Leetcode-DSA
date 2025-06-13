@@ -4,10 +4,7 @@ class Solution:
         def solve(n):
             if n<=2:
                 return n
-            
-            pick = solve(n-2) 
-            unpick = solve(n-1) 
-            return unpick + pick
+            return solve(n-2) + solve(n-1) 
 
         return solve(n)
 
