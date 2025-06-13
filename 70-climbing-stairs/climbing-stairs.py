@@ -2,13 +2,14 @@ class Solution:
     def climbStairs(self, n: int) -> int:
         @lru_cache(None)
         def solve(n):
-            if n==1: return 1
-            if n==2: return 2
+            if n<=2:
+                return n
+            
+            pick = solve(n-2) 
+            unpick = solve(n-1) 
+            return unpick + pick
 
-            return solve(n-1)+solve(n-2)
-        
         return solve(n)
-
 
 
 
