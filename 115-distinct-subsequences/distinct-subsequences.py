@@ -2,16 +2,17 @@ class Solution:
     def numDistinct(self, s: str, t: str) -> int:
         n,m = len(s), len(t)
 
-        @lru_cache(None)
+        @cache
         def solve(i,j):
-            if i>=n and j>=m: return 1
-            if i>=n: return 0
-            
-            not_pick = solve(i+1,j)
+            if j<0: return 1
+            if i<0: return j<0
             pick = 0
-            if i<n and j<m and s[i]==t[j]:
-                pick = solve(i+1,j+1)
+            if s[i]==t[j]:
+                pick =  solve(i-1,j-1)
 
+            
+            not_pick = solve(i-1,j)
+        
             return pick + not_pick
-
-        return solve(0,0)
+            
+        return solve(n-1,m-1)
