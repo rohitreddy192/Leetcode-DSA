@@ -1,6 +1,8 @@
 class Solution:
     def maxEnvelopes(self, arr: List[List[int]]) -> int:
-        arr.sort(key=lambda x: (x[0], -x[1]))
+        arr.sort(key=lambda x: (x[0], -x[1])) #
+        #  - x[1] because [[4,5],[4,6],[6,7],[2,3],[1,1]] this test case 
+        # LEts say 4,5 and 4,6 can't be considered at the same time as width is same only one should be considered so to eliminate that we sort x[1] heights in descending order.
         print(arr)
 
         def lis(nums):
