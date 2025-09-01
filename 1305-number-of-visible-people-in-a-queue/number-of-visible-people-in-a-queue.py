@@ -3,19 +3,15 @@ from typing import List
 class Solution:
     def canSeePersonsCount(self, heights: List[int]) -> List[int]:
         n = len(heights)
-        stack = []  # Monotonic decreasing stack
-        res = [0] * n  # Result array
-        
-        for i in range(n - 1, -1, -1):  # Traverse from right to left
-            count = 0
-            while stack and stack[-1] < heights[i]:  
+        output = []
+        stack = []
+        for num in heights[::-1]:
+            cnt = 0
+            while stack and stack[-1]<num:
                 stack.pop()
-                count += 1
-            
+                cnt += 1
             if stack:
-                count += 1  # The next taller person is also visible
-            
-            res[i] = count
-            stack.append(heights[i])  # Push current person to stack
-        
-        return res
+                cnt += 1
+            output.append(cnt)
+            stack.append(num)
+        return output[::-1]
