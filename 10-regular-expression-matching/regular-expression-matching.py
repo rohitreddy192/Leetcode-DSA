@@ -3,16 +3,13 @@ class Solution(object):
         n, m = len(text), len(pattern)
 
         @cache
-        def solve(i, j):
-            if j == m:
-                return i == n
+        def solve(i,j):
+            if j==m: return i==n
+            is_match = i<n and (text[i]==pattern[j] or pattern[j]==".")
 
-            first_match = i < n and (text[i] == pattern[j] or pattern[j] == ".")
-
-            if j+1 < m and pattern[j+1] == "*":
-                # zero occurrence OR one occurrence if first matches
-                return solve(i, j+2) or (first_match and solve(i+1, j))
+            if j<m-1 and pattern[j+1]=="*":
+                return (is_match and solve(i+1,j)) or solve(i, j+2)
             else:
-                return first_match and solve(i+1, j+1)
-
-        return solve(0, 0)
+                return is_match and solve(i+1,j+1)
+            
+        return solve(0,0)
