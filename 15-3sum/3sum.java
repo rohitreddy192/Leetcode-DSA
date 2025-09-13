@@ -7,7 +7,6 @@ class Solution {
             if(i>0 && nums[i]==nums[i-1]){
                 continue;
             }
-
             int j = i+1, k = n-1;
             while(j<k){
                 if(nums[i]+nums[j]+nums[k]==0){
