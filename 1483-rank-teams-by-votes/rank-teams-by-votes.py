@@ -1,20 +1,18 @@
 class Solution:
+    def rankTeams(self, votes):
+        n = len(votes[0])
 
-    def rankTeams(self, votes: List[str]) -> str:
-        cnt = len(votes[0])
-        ranks = {}
-        for candidate in votes[0]:
-            ranks[candidate] = [0] * cnt
-        
+        # Count votes per position for each team
+        count = {team: [0] * n for team in votes[0]}
+
         for vote in votes:
-            for i, c in enumerate(vote):
-                ranks[c][i] += 1
-        
-        print(ranks)
-        res = sorted(ranks.keys())
-        
-        print(res)
-        res.sort(key = ranks.get, reverse = True)
-        
-        print(res)
-        return "".join(res)
+            for i, team in enumerate(vote):
+                count[team][i] += 1
+
+        # Sort teams using lambda
+        teams = list(votes[0])
+        teams.sort(
+            key=lambda team: ([-count[team][i] for i in range(n)], team)
+        )
+
+        return "".join(teams)
