@@ -1,21 +1,22 @@
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        def dfs(node, vis, adj):
+            vis[node] = True
+            for ne in adj[node]:
+                if not vis[ne]:
+                    dfs(ne, vis, adj)
+            
+
+        cnt = 0
+        vis = [False for _ in range(n)]
         adj = [[] for _ in range(n)]
         for u,v in edges:
             adj[u].append(v)
             adj[v].append(u)
-        vis = set()
-        def dfs(node,vis):
-            if node not in vis:
-                vis.add(node)
-                for neigh in adj[node]:
-                    if neigh not in vis:
-                        dfs(neigh, vis)
-        
-        cnt = 0
+
         for i in range(n):
-            if i not in vis:
+            if not vis[i]:
+                dfs(i, vis, adj)
                 cnt += 1
-                dfs(i, vis)
         
         return cnt
