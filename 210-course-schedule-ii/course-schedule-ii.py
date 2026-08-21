@@ -4,7 +4,6 @@ class Solution:
     def solve(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         indegree = defaultdict(int)
         adj = [[] for _ in range(numCourses)]
-        vis = set()
         for u,v in prerequisites:
             adj[u].append(v)
             indegree[v] += 1
@@ -15,7 +14,6 @@ class Solution:
             if indegree[i] == 0:
                 dq.append(i)
                 ans.append(i)
-                vis.add(i)
         
         while dq:
             
