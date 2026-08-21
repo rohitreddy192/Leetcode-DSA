@@ -1,26 +1,23 @@
 class Solution:
-    def bfs(self, node, isConnected, visited):
-        from collections import deque
-
-        queue = deque([node])
-        visited[node] = True
-
-        while queue:
-            node = queue.popleft()
-
-            for i in range(len(isConnected)):
-                if isConnected[node][i] == 1 and not visited[i]:
-                    queue.append(i)
-                    visited[i] = True
-
-    def findCircleNum(self, isConnected):
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
         n = len(isConnected)
-        numberOfComponents = 0
-        visited = [False] * n
+        adj = [[] for _ in range(n)]
 
         for i in range(n):
-            if not visited[i]:
-                numberOfComponents += 1
-                self.bfs(i, isConnected, visited)
-
-        return numberOfComponents
+            for j in range(n):
+                if i!=j and isConnected[i][j] == 1:
+                    adj[i].append(j)
+        
+        vis = [False for _ in range(n)]
+        def dfs(node):
+            vis[node] = True
+            for nxt_node in adj[node]:
+                if not vis[nxt_node]:
+                    dfs(nxt_node)
+        cnt = 0
+        for i in range(n):
+            if not vis[i]:
+                dfs(i)
+                cnt += 1
+        
+        return cnt
