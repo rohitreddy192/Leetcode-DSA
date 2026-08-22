@@ -1,10 +1,12 @@
 class Solution:
     def findMin(self, nums: List[int]) -> int:
-        low, high = 0, len(nums)-1
-        while low<=high:
+        n = len(nums)
+        low, high = 0, n-1
+        while low<high:
             mid = (low+high)//2
-            if nums[0]<=nums[mid]:
+            if nums[mid]>nums[high]:
                 low = mid+1
             else:
-                high = mid-1
-        return nums[low%len(nums)]
+                high = mid
+
+        return nums[low]
