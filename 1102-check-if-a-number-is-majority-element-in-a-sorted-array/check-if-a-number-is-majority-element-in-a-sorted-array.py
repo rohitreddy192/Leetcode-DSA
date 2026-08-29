@@ -6,11 +6,12 @@ class Solution:
             while l<h:
                 m = (l+h)//2
                 if nums[m]>target:
+                    a = m
                     h = m
                 else:
                     l = m+1
             
-            return l
+            return a
 
         def ll():
             l, h = 0, len(nums)
@@ -18,10 +19,11 @@ class Solution:
             while l<h:
                 m = (l+h)//2
                 if nums[m]>=target:
+                    a = m
                     h = m
                 else:
                     l = m+1
             
-            return l
+            return a
 
         return (ul()-ll())*2 > len(nums) 
