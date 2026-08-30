@@ -6,5 +6,15 @@
 
 class Solution:
     def deleteNode(self, node):
-        node.val = node.next.val
-        node.next = node.next.next
+        prev = ListNode(0)
+        prev.next = node
+        
+        while node.next:
+            node.val = node.next.val
+            prev = node
+            node = node.next
+
+        prev.next = None
+        
+
+        
