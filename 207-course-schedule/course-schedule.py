@@ -1,28 +1,27 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        indegree = defaultdict(int)
+        # u -> v
         adj = [[] for _ in range(numCourses)]
-        vis = set()
-        for u,v in prerequisites:
+        indegree = [0]*(numCourses)
+        for u, v in prerequisites:
             adj[u].append(v)
             indegree[v] += 1
         
+        res = []
         dq = deque()
-        ans = []
         for i in range(numCourses):
-            if indegree[i] == 0:
+            if indegree[i]==0:
                 dq.append(i)
-                ans.append(i)
-                vis.add(i)
-        
+                res.append(i)
+
         while dq:
-            
-            node = dq.popleft()
-            for nxt_node in adj[node]:
-                indegree[nxt_node] -= 1
-                if indegree[nxt_node]==0:
-                    dq.append(nxt_node)
-                    ans.append(nxt_node)
+            for _ in range(len(dq)):
+                node = dq.popleft()
+                for nn in adj[node]:
+                    if indegree[nn]>0:
+                        indegree[nn] -= 1
+                        if indegree[nn] == 0:
+                            dq.append(nn)
+                            res.append(nn)
         
-        return len(ans)==numCourses
-                
+        return len(res)==numCourses
