@@ -1,12 +1,16 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        @cache
-        def solve(start, i):
-            if i<start: return 0
-            pick = nums[i] + solve(start,i-2)
-            not_pick = solve(start,i-1)
-            return max(pick,not_pick)
 
-        if len(nums)==0: return 0
-        if len(nums)==1: return nums[0]
-        return max(solve(0,len(nums)-2), solve(1,len(nums)-1))
+        dp = {}
+        def solve(baseIdx, idx):
+            if idx < baseIdx: return 0
+            if (baseIdx,idx) in dp: return dp[(baseIdx,idx)]
+
+            pick = nums[idx] + solve(baseIdx, idx-2)
+            not_pick = solve(baseIdx, idx-1)
+
+            dp[(baseIdx,idx)] =  max(pick, not_pick)
+
+            return dp[(baseIdx,idx)]
+        if len(nums)<=2: return max(nums)
+        return max(solve(0, len(nums)-2), solve(1,len(nums)-1))
