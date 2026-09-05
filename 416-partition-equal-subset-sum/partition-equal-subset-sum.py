@@ -1,16 +1,19 @@
 class Solution:
-    def canPartition(self, arr: List[int]) -> bool:
-        n = len(arr)
-        sumArray = sum(arr)
+    def canPartition(self, nums: List[int]) -> bool:
+        totSum = sum(nums)
+        halfSum = totSum//2
+        if totSum%2!=0: return False
 
-        if sumArray%2!=0: return False
-
-        @cache
-        def solve(i, target):
-            if target == 0: return True
+        dp = {}
+        def solve(idx, target):
+            if target==0: return True
             if target<0: return False
-            if i<0: return target == 0
 
-            return solve(i-1,target-arr[i]) or solve(i-1,target)
+            if idx==0: return target==nums[0]
 
-        return solve(n-1,sumArray//2)
+            if (idx,target) in dp: return dp[(idx,target)]
+            dp[(idx,target)] =  solve(idx-1,target-nums[idx]) or solve(idx-1,target)
+
+            return dp[(idx,target)]
+        
+        return solve(len(nums)-1, halfSum)
