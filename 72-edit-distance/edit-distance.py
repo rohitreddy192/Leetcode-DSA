@@ -6,7 +6,7 @@ class Solution:
         def solve(i,j):
             if j<0: return i+1
             if i<0: return j+1
-            if i<0 and j<0: return 0
+
 
             if word1[i]==word2[j]:
                 return solve(i-1,j-1)
