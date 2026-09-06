@@ -1,19 +1,20 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         n = len(prices)
+
         @cache
-        def solve(idx, buy, transactionsLeft):
-            if idx==n:
+        def solve(i, buy, k):
+            if k==0: return 0
+            if i==n:
                 return 0
-            
-            if transactionsLeft == 0:
-                return 0
-                
-            if not buy and transactionsLeft>0:
-                return max(-prices[idx] + solve(idx+1, True, transactionsLeft), solve(idx+1, buy, transactionsLeft))
 
+            pick = not_pick = 0
+
+            if buy:
+                pick = max(-prices[i] + solve(i+1,not buy,k), solve(i+1, buy, k))
             else:
-                return max(prices[idx]+solve(idx+1,False, transactionsLeft-1), solve(idx+1, buy, transactionsLeft))
-
-
-        return solve(0,False,2)
+                not_pick = max(prices[i]+solve(i+1,not buy,k-1), solve(i+1,buy,k))
+                        
+            return max(pick, not_pick)
+        
+        return solve(0, True, 2)
