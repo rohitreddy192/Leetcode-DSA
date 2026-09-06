@@ -7,22 +7,12 @@ class Solution:
             if n == 0:
                 return not alice_turn
 
-            if alice_turn:
-                # Alice wants to find ONE move where she wins
-                for i in range(1, int(n ** 0.5) + 1):
+            for i in range(1, int(n ** 0.5) + 1):
+                if alice_turn and solve(n - i*i, False):
+                    return True
+                if not alice_turn and not solve(n - i*i, True):
+                    return False
 
-                    if solve(n - i * i, False):
-                        return True
-
-                return False
-
-            else:
-                # Bob wants to find ONE move where Alice loses
-                for i in range(1, int(n ** 0.5) + 1):
-
-                    if not solve(n - i * i, True):
-                        return False
-
-                return True
+            return not alice_turn
 
         return solve(n, True)
