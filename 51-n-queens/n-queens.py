@@ -1,22 +1,44 @@
 class Solution:
-    def solveNQueens(self, n: int) -> List[List[str]]:
-        left,upleft,lowleft=[0]*n,[0]*(2*n-1),[0]*(2*n-1)
-        ans=[]
-        def solve(col,board):
-            if col==n:
-                ans.append(["".join(i) for i in board])
-                return 
-            for row in range(n):
-                if not left[row] and not upleft[n-1+row-col] and not lowleft[row+col]:
-                    board[row][col]="Q"
-                    left[row]=1
-                    upleft[n-1+row-col]=1
-                    lowleft[row+col]=1
-                    solve(col+1,board)
-                    board[row][col]="."
-                    left[row]=0
-                    upleft[n-1+row-col]=0
-                    lowleft[row+col]=0
-        board=[["." for i in range(n)] for _ in range(n)]
-        solve(0,board)
+    def solveNQueens(self, n: int) -> list[list[str]]:
+        matrix = [["." for _ in range(n)] for _ in range(n)]
+        ans = []
+
+        def isSafe(i, j):
+
+            # Column
+            for idx in range(n):
+                if matrix[idx][j] == "Q":
+                    return False
+
+            # Upper-left and upper-right diagonals
+            for di, dj in [(-1, -1), (-1, 1)]:
+                ddi, ddj = i + di, j + dj
+
+                while 0 <= ddi < n and 0 <= ddj < n:
+                    if matrix[ddi][ddj] == "Q":
+                        return False
+
+                    ddi += di
+                    ddj += dj
+
+            return True
+
+        def solve(i):
+            if i == n:
+                ans.append(["".join(row) for row in matrix])
+                return
+
+            for j in range(n):
+
+                if isSafe(i, j):
+
+                    matrix[i][j] = "Q"
+
+                    solve(i + 1)
+
+                    # BACKTRACK
+                    matrix[i][j] = "."
+
+        solve(0)
+
         return ans
