@@ -1,19 +1,39 @@
 class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
+    def canPartition(self, nums: list[int]) -> bool:
+        if sum(nums)%2==1: return False
+
+        n = len(nums)
         totSum = sum(nums)
-        halfSum = totSum//2
-        if totSum%2!=0: return False
+        target = totSum//2
+        # @lru_cache(None)
+        # def solve(idx, target):
+        #     if target==0: return True
+        #     if idx<0: return False
 
-        dp = {}
-        def solve(idx, target):
-            if target==0: return True
-            if target<0: return False
+        #     pick = False
+        #     if target>=nums[idx]:
+        #         pick = solve(idx-1, target-nums[idx])
+            
+        #     not_pick = solve(idx-1,target)
 
-            if idx==0: return target==nums[0]
+        #     dp[idx][target] pick or not_pick
 
-            if (idx,target) in dp: return dp[(idx,target)]
-            dp[(idx,target)] =  solve(idx-1,target-nums[idx]) or solve(idx-1,target)
-
-            return dp[(idx,target)]
         
-        return solve(len(nums)-1, halfSum)
+        # return solve(n-1,totSum//2)
+
+        dp = [[False for _ in range(target + 1)] for _ in range(n)]
+        for i in range(n):
+            dp[i][0] = True
+        
+        for i in range(n):
+            for j in range(target+1):
+                pick = False
+                if j>=nums[i]:
+                    pick = dp[i-1][j-nums[i]]
+                
+                not_pick = dp[i-1][j]
+
+                dp[i][j] = pick or not_pick
+        
+        return dp[n-1][target]
+
