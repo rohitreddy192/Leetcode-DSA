@@ -9,4 +9,19 @@ class Solution:
             dp[(row,col)] =  triangle[row][col] + min(solve(row+1,col,dp), solve(row+1,col+1,dp))
             return dp[(row,col)]
 
-        return solve(0,0,{})
+        n = len(triangle)
+        dp = {}
+
+        # Base case: beyond the last row
+        for col in range(n + 1):
+            dp[(n, col)] = 0
+
+        # Bottom-up traversal
+        for row in range(n - 1, -1, -1):
+            for col in range(row + 1):
+                dp[(row, col)] = triangle[row][col] + min(
+                    dp[(row + 1, col)],
+                    dp[(row + 1, col + 1)]
+                )
+
+        return dp[(0, 0)]
