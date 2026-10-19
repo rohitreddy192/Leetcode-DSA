@@ -5,21 +5,19 @@ class Solution:
         def jumpLists(k):
             return [k-1,k,k+1]
 
-        @cache
-        def solve(idx, jumpSize):
+        def solve(idx, jumpSize, dp):
             if idx==n-1:
                 return True
 
-            curr_idx_val = stones[idx]
-
+            if (idx,jumpSize) in dp: return dp[(idx,jumpSize)]
             isSolved = False
             for jump in jumpLists(jumpSize):
                 for i in range(idx+1,n):
-                    if curr_idx_val + jump == stones[i]:
-                        isSolved = isSolved or solve(i,jump)
+                    if stones[idx] + jump == stones[i]:
+                        isSolved = isSolved or solve(i,jump,dp)
                         break
             
+            dp[(idx,jumpSize)] = isSolved
             return isSolved
-
                 
-        return solve(0,0)
+        return solve(0,0,{})
