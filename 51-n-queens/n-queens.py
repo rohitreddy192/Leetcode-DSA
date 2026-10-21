@@ -1,44 +1,35 @@
 class Solution:
     def solveNQueens(self, n: int) -> list[list[str]]:
-        matrix = [["." for _ in range(n)] for _ in range(n)]
-        ans = []
+        rows = [-1]*n
 
-        def isSafe(i, j):
+        def isPossible(row, j):
+            for prev_row in range(row):
+                prev_col = rows[prev_row]
 
-            # Column
-            for idx in range(n):
-                if matrix[idx][j] == "Q":
+                if prev_col == j:
                     return False
 
-            # Upper-left and upper-right diagonals
-            for di, dj in [(-1, -1), (-1, 1)]:
-                ddi, ddj = i + di, j + dj
+                distance = row - prev_row
 
-                while 0 <= ddi < n and 0 <= ddj < n:
-                    if matrix[ddi][ddj] == "Q":
-                        return False
-
-                    ddi += di
-                    ddj += dj
+                if prev_col == j - distance or prev_col == j + distance:
+                    return False
 
             return True
 
-        def solve(i):
-            if i == n:
-                ans.append(["".join(row) for row in matrix])
-                return
-
+        ans = []
+        def solve(board, row):
+            if row==n:
+                ans.append(["".join(r) for r in board])
+                return 
             for j in range(n):
+                if isPossible(row, j):
+                    board[row][j] = "Q"
+                    rows[row] = j 
+                    solve(board, row+1)
+                    board[row][j] = "."
+                    rows[row] = -1
 
-                if isSafe(i, j):
-
-                    matrix[i][j] = "Q"
-
-                    solve(i + 1)
-
-                    # BACKTRACK
-                    matrix[i][j] = "."
-
-        solve(0)
+        board = [["." for _ in range(n)] for _ in range(n)]  
+        solve(board,0)
 
         return ans
