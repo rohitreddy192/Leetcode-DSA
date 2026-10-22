@@ -4,7 +4,6 @@ class Solution:
         def merge(l, m, h):
             i,j = l, m+1
             cnt = 0
-
             for i in range(l, m + 1):
                 while j <= h and nums[i] > 2 * nums[j]:
                     j += 1
