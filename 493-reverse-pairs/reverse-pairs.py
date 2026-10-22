@@ -1,55 +1,43 @@
 class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
+    def reversePairs(self, nums: list[int]) -> int:
         
-        def merge(low, mid, high):
-            # Count reverse pairs
-            j = mid + 1
+        def merge(l, m, h):
+            i,j = l, m+1
             cnt = 0
-
-            for i in range(low, mid + 1):
-                while j <= high and nums[i] > 2 * nums[j]:
+            for i in range(l, m + 1):
+                while j <= h and nums[i] > 2 * nums[j]:
                     j += 1
+                cnt += j - (m + 1)
 
-                cnt += j - (mid + 1)
-
-            # Normal merge
-            i = low
-            j = mid + 1
-            temp = []
-
-            while i <= mid and j <= high:
-                if nums[i] <= nums[j]:
-                    temp.append(nums[i])
+            tmp = []
+            i, j = l, m+1
+            while i<=m and j<=h:
+                if nums[i]<nums[j]:
+                    tmp.append(nums[i])
                     i += 1
                 else:
-                    temp.append(nums[j])
+                    tmp.append(nums[j])
                     j += 1
-
-            while i <= mid:
-                temp.append(nums[i])
+            
+            while i<=m:
+                tmp.append(nums[i])
                 i += 1
-
-            while j <= high:
-                temp.append(nums[j])
+            
+            while j<=h:
+                tmp.append(nums[j])
                 j += 1
+            nums[l:h+1] = tmp
+            return cnt
+            
 
-            for k in range(low, high + 1):
-                nums[k] = temp[k - low]
-
+        def mergeSort(l,h):
+            if l>=h: return 0
+            cnt = 0
+            m = (l+h)//2
+            cnt += mergeSort(l, m)
+            cnt += mergeSort(m+1,h)
+            cnt += merge(l,m,h)
             return cnt
 
-        def mergeSort(low, high):
-            if low >= high:
-                return 0
-
-            mid = (low + high) // 2
-
-            cnt = mergeSort(low, mid)
-            cnt += mergeSort(mid + 1, high)
-            cnt += merge(low, mid, high)
-
-            return cnt
-
-        return mergeSort(0,len(nums)-1)
-            
-            
+        l, h = 0, len(nums)-1
+        return mergeSort(l,h)
