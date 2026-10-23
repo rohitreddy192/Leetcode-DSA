@@ -1,15 +1,19 @@
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        l = list()
-        def solve(tot,i,l,ds):
-            if tot<0: return
-            if i>=len(candidates): return
-            if tot == 0:
-                l.append(tuple(ds))
-                return
-            ds.append(candidates[i])
-            solve(tot-candidates[i],i,l,ds)
-            ds.pop()
-            solve(tot,i+1,l,ds)
-        solve(target,0,l,[])
-        return l
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        
+        ans = []
+        n = len(candidates)
+        def solve(idx, tmp, target):
+            if target == 0:
+                ans.append(tmp.copy())
+                return 
+            if idx==n: return 
+
+            solve(idx+1, tmp, target)
+            if target-candidates[idx]>=0:
+                tmp.append(candidates[idx])
+                solve(idx, tmp, target-candidates[idx])
+                tmp.pop()
+        
+        solve(0, [], target)
+        return ans
