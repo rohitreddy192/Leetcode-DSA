@@ -1,11 +1,13 @@
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
         counterP = Counter(p)
-        counterS = defaultdict(int)
         trackerSet = set(counterP.keys())
         ans = []
+        m = len(p)
+
         for jdx, st in enumerate(s):
-            if st in trackerSet and Counter(s[jdx:jdx+len(p)]) == counterP:
-                ans.append(jdx)
-        
+            if jdx + m <= len(s) and st in trackerSet:
+                if Counter(s[jdx:jdx + m]) == counterP:
+                    ans.append(jdx)
+
         return ans
