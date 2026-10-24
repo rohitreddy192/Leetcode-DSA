@@ -1,20 +1,23 @@
 class Solution:
     def checkValidString(self, s: str) -> bool:
-        n = len(s)
-        @cache
-        def solve(idx, val):
-            if val<0: return False
-            
-            if idx==n:
-                return val==0
-            
-            st = s[idx]
+        low = high = 0
 
-            if st in "()":
-                return solve(idx+1, val + (1 if st == "(" else -1))
-            
-            else:
+        for ch in s:
+            if ch == "(":
+                low += 1
+                high += 1
 
-                return solve(idx+1, val+1) or solve(idx+1,val-1) or solve(idx+1, val)
+            elif ch == ")":
+                low -= 1
+                high -= 1
 
-        return solve(0,0)
+            else:  # '*'
+                low -= 1
+                high += 1
+
+            if high < 0:
+                return False
+
+            low = max(low, 0)
+
+        return low == 0
