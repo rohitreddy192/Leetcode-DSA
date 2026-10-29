@@ -1,17 +1,17 @@
-from typing import List
-
 class Solution:
-    def canSeePersonsCount(self, heights: List[int]) -> List[int]:
+    def canSeePersonsCount(self, heights: list[int]) -> list[int]:
         n = len(heights)
-        output = []
         stack = []
-        for num in heights[::-1]:
-            cnt = 0
-            while stack and stack[-1]<num:
+        res = [0] * n
+
+        for i in range(n - 1, -1, -1):
+            while stack and heights[stack[-1]] < heights[i]:
                 stack.pop()
-                cnt += 1
+                res[i] += 1
+
             if stack:
-                cnt += 1
-            output.append(cnt)
-            stack.append(num)
-        return output[::-1]
+                res[i] += 1
+
+            stack.append(i)
+
+        return res
