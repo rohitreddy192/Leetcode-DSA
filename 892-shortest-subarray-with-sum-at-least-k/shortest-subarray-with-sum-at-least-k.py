@@ -1,29 +1,23 @@
-
-from collections import deque
-from typing import List
-
 class Solution:
-    def shortestSubarray(self, nums: List[int], k: int) -> int:
+    def shortestSubarray(self, nums: list[int], k: int) -> int:
         res = float("inf")
 
-        cur_sum = 0
-        q = deque()  # (prefix_sum, end_idx)
+        dq = deque()
 
-        for r in range(len(nums)):
-            cur_sum += nums[r]
+        curr_sum = 0
+        
+        for idx, num in enumerate(nums):
+            curr_sum += num
 
-            if cur_sum >= k:
-                res = min(res, r + 1)
+            if curr_sum >= k:
+                res = min(res, idx+1)
 
-            # Find the minimum valid window ending at r
-            while q and cur_sum - q[0][0] >= k:
-                prefix, end_idx = q.popleft()
-                res = min(res, r - end_idx)
-
-            # Maintain the monotonic deque
-            while q and q[-1][0] >= cur_sum:
-                q.pop()
-
-            q.append((cur_sum, r))
-
-        return -1 if res == float("inf") else res
+            while dq and curr_sum-dq[0][0]>=k:
+                sum, idxL = dq.popleft()
+                res = min(res, idx-idxL)
+            
+            while dq and dq[-1][0] >= curr_sum:
+                dq.pop()
+            dq.append((curr_sum, idx))
+        
+        return res if res!=float("inf") else -1
