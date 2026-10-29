@@ -20,8 +20,10 @@ class Solution:
             if start[i] != end[j]:
                 return False
             if start[i] == 'L' and i < j:
+                #XL
                 return False
             if start[i] == 'R' and i > j:
+                #RX
                 return False
 
             i += 1
