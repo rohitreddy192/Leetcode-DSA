@@ -7,6 +7,5 @@ class Solution:
             if x in last:
                 dp[-1] -= dp[last[x]]
             last[x] = i
-            # print(last)
 
         return (dp[-1] - 1) % (10**9 + 7)
