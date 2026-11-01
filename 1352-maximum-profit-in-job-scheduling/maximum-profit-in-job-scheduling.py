@@ -5,6 +5,7 @@ from bisect import bisect_left
 class Solution:
     def jobScheduling(self, startTime: list[int], endTime: list[int], profit: list[int]) -> int:
         jobs = sorted(zip(startTime, endTime, profit))
+        print(jobs)
         starts = [job[0] for job in jobs]
         n = len(jobs)
 
