@@ -1,51 +1,59 @@
 class Solution:
-    def braceExpansionII(self, expression: str) -> List[str]:
-        op = []  # Operator stack
-        stk = []  # Set stack
+    def braceExpansionII(self, expression: str):
+        operators = []
+        operands = []
 
-        # Pop the operator at the top of the stack and perform the calculation
-        def ope():
-            l, r = len(stk) - 2, len(stk) - 1
-            if op[-1] == "+":
-                # Union operation
-                stk[l] |= stk[r]
+        def apply():
+            op = operators.pop()
+            b = operands.pop()
+            a = operands.pop()
+
+            if op == ',':
+                operands.append(list(set(a) | set(b)))
             else:
-                # Cartesian product operation
-                tmp = set()
-                for left in stk[l]:
-                    for right in stk[r]:
-                        tmp.add(left + right)
-                stk[l] = tmp
-            op.pop()
-            stk.pop()
+                # Cartesian product
+                operands.append([x + y for x in a for y in b])
 
-        for i, ch in enumerate(expression):
-            if ch == ",":
-                # Keep popping operators from the top of the stack until the stack is empty or its top is not a multiplication sign
-                while op and op[-1] == "*":
-                    ope()
-                op.append("+")
-            elif ch == "{":
-                # First determine whether a multiplication sign needs to be added, then push { onto the operator stack
-                if i > 0 and (
-                    expression[i - 1] == "}" or expression[i - 1].isalpha()
-                ):
-                    op.append("*")
-                op.append("{")
-            elif ch == "}":
-                # Keep popping operators from the top of the stack until its top is {
-                while op and op[-1] != "{":
-                    ope()
-                op.pop()
-            else:
-                # First determine whether a multiplication sign needs to be added, then push the newly constructed set onto the set stack
-                if i > 0 and (
-                    expression[i - 1] == "}" or expression[i - 1].isalpha()
-                ):
-                    op.append("*")
-                stk.append({ch})
+        def precedence(op):
+            return 2 if op == '*' else 1
 
-        while op:
-            ope()
+        def add_operator(op):
+            while (operators and operators[-1] != '{'
+                   and precedence(operators[-1]) >= precedence(op)):
+                apply()
+            operators.append(op)
 
-        return sorted(stk[-1])
+        prev = None
+
+        for ch in expression:
+
+            if ch.isalpha():
+                # Implicit concatenation
+                if prev in ('letter', 'close'):
+                    add_operator('*')
+
+                operands.append([ch])
+                prev = 'letter'
+
+            elif ch == '{':
+                if prev in ('letter', 'close'):
+                    add_operator('*')
+
+                operators.append('{')
+                prev = 'open'
+
+            elif ch == ',':
+                add_operator(',')
+                prev = 'comma'
+
+            elif ch == '}':
+                while operators and operators[-1] != '{':
+                    apply()
+
+                operators.pop()
+                prev = 'close'
+
+        while operators:
+            apply()
+
+        return sorted(set(operands[-1]))
