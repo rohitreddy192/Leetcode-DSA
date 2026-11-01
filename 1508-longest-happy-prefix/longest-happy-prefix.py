@@ -1,23 +1,18 @@
 class Solution:
     def longestPrefix(self, s: str) -> str:
-        # Longest Common Lets see starting with s[0] and its indices
-
-        if not s: return ""
-
-        idx0 = s[0]
         n = len(s)
-        l = list()
-        for idx, st in enumerate(s):
-            if st == idx0 and idx!=0:
-                l.append(idx)
+        lps = [0] * n
 
-        for idx in l:
-            le = n - idx
-            prefix = s[:le]
-            suffix = s[idx:]
-            # print(prefix)
-            # print(suffix)
-            if prefix==suffix:
-                return prefix
+        j = 0
 
-        return ""
+        for i in range(1, n):
+
+            while j > 0 and s[i] != s[j]:
+                j = lps[j - 1]
+
+            if s[i] == s[j]:
+                j += 1
+
+            lps[i] = j
+
+        return s[:lps[-1]]
