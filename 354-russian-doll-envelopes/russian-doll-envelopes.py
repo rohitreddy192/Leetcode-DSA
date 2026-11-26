@@ -1,6 +1,7 @@
 class Solution:
     def maxEnvelopes(self, envelopes: list[list[int]]) -> int:
         envelopes.sort(key=lambda x: (x[0],-x[1]))
+        print(envelopes)
         dp = []
         for w, h in envelopes:
             idx = bisect_left(dp, h)
