@@ -1,18 +1,28 @@
+import heapq
+
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        res = []
-        n = len(intervals)
-        intervals.sort()
-        start = intervals[0][0]
-        end = intervals[0][1]
-        for i in range(1,n):
-            if intervals[i][0]<=end:
-                end = max(end, intervals[i][1])
-            else:
-                res.append([start,end])
-                start = intervals[i][0]
-                end = intervals[i][1]
+        if not intervals:
+            return []
 
-        res.append([start,end])
+        heap = []
+
+        for start, end in intervals:
+            heapq.heappush(heap, (start, end))
+
+        res = []
+
+        start, end = heapq.heappop(heap)
+
+        while heap:
+            curr_start, curr_end = heapq.heappop(heap)
+
+            if curr_start <= end:
+                end = max(end, curr_end)
+            else:
+                res.append([start, end])
+                start, end = curr_start, curr_end
+
+        res.append([start, end])
 
         return res
